@@ -5,8 +5,6 @@
 # refused : 1- the last transition (character) doesn't take us to Sf 
 #2- we are blocked at a state and can't move ( becausethe state doesn't have a tranistion (coming out of the state )that is laeled as the next caracter in the word)
 #Non determinist 
-#
-
 class StateMachine:
     def __init__(self):
         self.states = set()
@@ -19,11 +17,7 @@ class StateMachine:
 
     def set_start_state(self, state):
         if state in self.states:
-            if self.start_state is None:
-                self.start_state = state
-            else:
-                self.start_state = state
-                print("Start state updated.")
+            self.start_state = state
         else:
             print("State not found or not in the state set.")
 
@@ -42,32 +36,34 @@ class StateMachine:
             print("One or both states not found.")
 
     def visualize(self):
-        if self.start_state:
-            print("\nFinite State Automaton:")
-            visited = set()
-
-            def traverse(current_state, path):
-                visited.add(current_state)
-                if current_state in self.transitions:
-                    for next_state, label in self.transitions[current_state]:
-                        if next_state not in visited:
-                            traverse(next_state, f"{path} --({label})--> {next_state}")
-                if current_state in self.final_states:
-                    print(f"Path: {path}*")
-                elif current_state not in self.transitions:
-                    print(f"Path: {path}")
-
-            traverse(self.start_state, f"={self.start_state}")
-
-            for state in self.states:
-                if state not in visited:
-                    if state in self.final_states:
-                        print(f"Path: {state}*")
-                    else:
-                        print(f"Path: {state}")
-
-        else:
+        if not self.start_state:
             print("Start state is not set.")
+            return
+
+        print("\nFinite State Automaton:")
+        paths = []
+
+        def traverse(current_state, path):
+            # Check if the current path is leading to a final state
+            if current_state in self.final_states:
+                paths.append(f"{path} -> {current_state}*")
+                return
+
+            if current_state not in self.transitions:
+                paths.append(f"{path} -> {current_state}")
+                return
+
+            for next_state, label in self.transitions[current_state]:
+                if next_state == current_state:
+                    # Handling loop in the same state
+                    paths.append(f"{path} -> {current_state} --({label})-- Loop")
+                else:
+                    traverse(next_state, f"{path} -> {current_state} --({label})--")
+
+        traverse(self.start_state, f"Start={self.start_state}")
+
+        for path in paths:
+            print(f"Path: {path}")
 
 def main():
     fsm = StateMachine()
