@@ -12,13 +12,13 @@ class StateMachine:
         if state in self.states:
             self.start_state = state
         else:
-            print("State not found or not in the state set.")
+            print("etat inexistante .")
 
     def add_final_state(self, state):
         if state in self.states:
             self.final_states.add(state)
         else:
-            print("State not found.")
+            print("etet inexistante.")
 
     def add_transition(self, from_state, to_state, label):
         if from_state in self.states and to_state in self.states:
@@ -26,14 +26,14 @@ class StateMachine:
                 self.transitions[from_state] = []
             self.transitions[from_state].append((to_state, label))
         else:
-            print("One or both states not found.")
+            print(" l'un des etates est  inexistante")
 
     def visualize(self):
         if not self.start_state:
-            print("Start state is not set.")
+            print("l'etat initial inexistante ")
             return
 
-        print("\nFinite State Automaton:")
+        print("\nl'automate:")
         paths = []
 
         def traverse(current_state, path):
@@ -47,11 +47,11 @@ class StateMachine:
 
             for next_state, label in self.transitions[current_state]:
                 if next_state == current_state:
-                    paths.append(f"{path} -> {current_state} --({label})-- Loop")
+                    paths.append(f"{path} -> {current_state} --({label})-- boucle")
                 else:
                     traverse(next_state, f"{path} -> {current_state} --({label})--")
 
-        traverse(self.start_state, f"Start={self.start_state}")
+        traverse(self.start_state, f"start={self.start_state}")
 
         for path in paths:
             print(f"Path: {path}")
@@ -67,49 +67,49 @@ class StateMachine:
                         transition_found = True
                         break
             if not transition_found:
-                return False, "Blocked: No transition for current character."
+                return False, "Bloqué : Aucune transition pour le caractère actuel."
 
-        return current_state in self.final_states, "Accepted" if current_state in self.final_states else "Rejected: Last transition doesn't lead to final state."
+        return current_state in self.final_states, "Accepté" if current_state in self.final_states else "Rejeté : La dernière transition ne mène pas à l'état final."
 
 def main():
     fsm = StateMachine()
 
     while True:
-        print("\nOptions:")
-        print("1. Add state")
-        print("2. Set start state")
-        print("3. Add final state")
-        print("4. Add transition")
-        print("5. Visualize")
+        print("\n menu:")
+        print("1. ajouter etat")
+        print("2.  Définir l'état initial ")
+        print("3. Définir l'état final ")
+        print("4. Ajouter  transition")
+        print("5. Visualizer")
         print("6. Exit")
-        print("7. Test string")
+        print("7. Tester  un mot ")
 
-        choice = input("Enter your choice: ")
+        choice = input("Entrez votre choix :")
 
         if choice == "1":
-            state = input("Enter state name: ")
+            state = input("Entre ke nom de l'etat: ")
             fsm.add_state(state)
         elif choice == "2":
-            start_state = input("Enter start state: ")
+            start_state = input("Entre l'etet initial: ")
             fsm.set_start_state(start_state)
         elif choice == "3":
-            final_state = input("Enter final state: ")
+            final_state = input("Entre l'etet final: ")
             fsm.add_final_state(final_state)
         elif choice == "4":
-            from_state = input("Enter from state: ")
-            to_state = input("Enter to state: ")
-            label = input("Enter transition label: ")
+            from_state = input(" De: ")
+            to_state = input("Vers: ")
+            label = input("le caracter: ")
             fsm.add_transition(from_state, to_state, label)
         elif choice == "5":
             fsm.visualize()
         elif choice == "7":
-            test_str = input("Enter string to test: ")
+            test_str = input("Entre le mot a tester: ")
             accepted, message = fsm.test_string(test_str)
-            print(f"Result: {'Accepted' if accepted else 'Rejected'} - {message}")
+            print(f"Result: {'Accepté' if accepted else 'Rejecté'} - {message}")
         elif choice == "6":
             break
         else:
-            print("Invalid choice. Try again.")
+            print("choix Invalid . réessayer .")
 
 if __name__ == "__main__":
     main()
