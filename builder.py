@@ -1,10 +1,3 @@
-#les boucles 
-#Deterministe 
-# cases accepted : - the chars of the word takes us from S0 and finishes at Sf (one transition at each character and
-#we can pass by Sf before it's ending what's important is that the last transition ( character take sus to Sf )
-# refused : 1- the last transition (character) doesn't take us to Sf 
-#2- we are blocked at a state and can't move ( becausethe state doesn't have a tranistion (coming out of the state )that is laeled as the next caracter in the word)
-#Non determinist 
 class StateMachine:
     def __init__(self):
         self.states = set()
